@@ -63,7 +63,7 @@ disponible: true
 ---
 ```
 
-- `categoria`: tiene que ser `"vasos"` o `"bowls"`.
+- `categoria`: tiene que ser `"vasos"`, `"bowls"`, `"extras"` o `"para-llevar"`. Define en qué bloque de la carta aparece.
 - `orden`: en qué posición aparece (1 = primero).
 - `disponible: false` lo oculta sin borrarlo.
 

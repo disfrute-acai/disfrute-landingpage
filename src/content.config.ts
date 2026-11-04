@@ -46,7 +46,7 @@ const productos = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/productos" }),
   schema: z.object({
     nombre: traducido,
-    categoria: z.enum(["vasos", "bowls"]),
+    categoria: z.enum(["vasos", "bowls", "extras", "para-llevar"]),
     detalle: z.string().optional(),
     precio,
     orden: z.number().int().default(99),

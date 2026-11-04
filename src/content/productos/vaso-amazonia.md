@@ -4,8 +4,8 @@ nombre:
   pt: "Copo Amazônia"
   en: "Amazônia Cup"
 categoria: "vasos"
-detalle: "+ 4 toppings"
-precio: 370
+detalle: "350 ml + 4 toppings"
+precio: 430
 orden: 2
 disponible: true
 ---

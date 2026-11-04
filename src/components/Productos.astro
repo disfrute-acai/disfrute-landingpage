@@ -18,11 +18,13 @@ if (!toppings) throw new Error("Falta src/content/toppings.md");
 const productos = (await getCollection("productos", ({ data }) => data.disponible)).sort(
   (a, b) => a.data.orden - b.data.orden,
 );
-const categorias = (["vasos", "bowls"] as const)
+const categorias = (["vasos", "bowls", "extras", "para-llevar"] as const)
   .map((id) => ({ nombre: t.categorias[id], items: productos.filter((p) => p.data.categoria === id) }))
   .filter((c) => c.items.length > 0);
 
 const { precio_extra } = toppings.data;
+// Pesos uruguayos con punto de miles (1.100) en todos los idiomas
+const pesos = (n: number) => n.toLocaleString("es-UY");
 const grupos = (["salsas", "secos", "frutas"] as const).map((id) => ({
   nombre: t.grupos[id],
   items: toppings.data[id].map((x) => x[lang]),
@@ -30,7 +32,6 @@ const grupos = (["salsas", "secos", "frutas"] as const).map((id) => ({
 ---
 
 <section id="productos" class="seccion seccion--crema seccion--deco">
-  <img class="deco deco--rama" src={ruta("img/deco/acai-rama.webp")} alt="" width="720" height="643" loading="lazy" />
   <div class="contenedor">
     <div class="acai">
       <div class="acai__fotos revelar">
@@ -43,6 +44,7 @@ const grupos = (["salsas", "secos", "frutas"] as const).map((id) => ({
     </div>
 
     <div class="menu revelar">
+      <img class="menu__vaso" src={ruta("img/productos/vaso.webp")} alt="" width="600" height="965" loading="lazy" />
       <h2 class="menu__titulo">{t.menuTitulo}</h2>
       {
         categorias.map((c) => (
@@ -55,7 +57,7 @@ const grupos = (["salsas", "secos", "frutas"] as const).map((id) => ({
                     {data.nombre[lang]} {data.detalle && <small>{data.detalle}</small>}
                   </span>
                   <span class="menu__puntos" aria-hidden="true" />
-                  <span class="menu__precio">$ {data.precio}</span>
+                  <span class="menu__precio">$ {pesos(data.precio)}</span>
                 </li>
               ))}
             </ul>
@@ -73,7 +75,7 @@ const grupos = (["salsas", "secos", "frutas"] as const).map((id) => ({
           ))
         }
       </div>
-      <p class="menu__extra">{t.extra} <span>$ {precio_extra} {t.cadaUno}</span></p>
+      <p class="menu__extra">{t.extra} <span>$ {pesos(precio_extra)} {t.cadaUno}</span></p>
     </div>
   </div>
 </section>

@@ -55,6 +55,6 @@ Todo sigue el *Brand Book ¡Disfrute!* (ago. 2025): paleta `#392054` / `#F3F1E9`
 
 - **Tipografías:** la marca usa Praliner (títulos) y Petita (textos). Se usan Josefin Sans y Nunito (OFL) como reemplazo hasta tener los archivos con **licencia web**; no extraerlas del PDF.
 - **Traducciones:** revisar con los dueños el portugués e inglés (nombres de productos, lema "Abra suas asas…" / "Spread your wings…").
-- **Precios del menú:** vienen del brand book (ago. 2025). Confirmar que siguen vigentes.
+- **Precios del menú:** actualizados con la carta nueva (nov. 2026).
 - **Fotos de producto:** las de açaí son recortes de Instagram en baja resolución; idealmente reemplazar por originales.
 - **Textos de salud:** del banner del brand book se tomaron solo los datos nutricionales; se omitieron afirmaciones como "desintoxica" o "ayuda a perder peso": son afirmaciones de salud que no conviene publicar sin respaldo.

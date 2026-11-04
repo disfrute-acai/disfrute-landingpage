@@ -1,27 +1,21 @@
 ---
-// Separador orgánico entre secciones: el fondo es el color de la sección de arriba
-// y la onda el de la de abajo. `sobre` lo superpone al final de la sección anterior (hero).
+// Separador orgánico entre secciones: se superpone al final de la sección anterior
+// con el color de la siguiente, así las plantas de abajo quedan "plantadas" en la onda.
 type Color = "morado" | "morado-oscuro" | "verde" | "crema" | "blanco";
 
 interface Props {
-  desde?: Color;
   hacia: Color;
   forma?: 1 | 2;
-  sobre?: boolean;
 }
 
-const { desde, hacia, forma = 1, sobre = false } = Astro.props;
+const { hacia, forma = 1 } = Astro.props;
 const formas = {
   1: "M0,40 C240,100 480,0 720,40 C960,80 1200,10 1440,50 L1440,100 L0,100 Z",
   2: "M0,60 C300,0 600,100 900,50 C1140,10 1300,70 1440,30 L1440,100 L0,100 Z",
 };
 ---
 
-<div
-  class:list={["onda", { "onda--sobre": sobre }]}
-  style={desde ? `background: var(--${desde})` : undefined}
-  aria-hidden="true"
->
+<div class="onda" aria-hidden="true">
   <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
     <path d={formas[forma]} fill={`var(--${hacia})`}></path>
   </svg>

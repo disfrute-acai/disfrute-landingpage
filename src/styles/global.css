@@ -12,6 +12,7 @@
   --negro: #000000;
   --texto: #2a173f;
   --radio: 1.25rem;
+  --alto-onda: clamp(2.5rem, 7vw, 6rem);
   --ancho: 72rem;
   --sombra: 0 10px 30px rgb(57 32 84 / 0.12);
   --sombra-fuerte: 0 18px 40px rgb(57 32 84 / 0.25);
@@ -239,6 +240,11 @@ a:focus-visible {
     margin-inline: auto;
   }
 
+  /* La medida va debajo del nombre para que no se corte a mitad de línea */
+  .menu__nombre small {
+    display: block;
+  }
+
   .encontranos .horarios {
     width: fit-content;
     margin-inline: auto;
@@ -284,19 +290,25 @@ a:focus-visible {
 
 .hero__loro {
   left: clamp(-2rem, -2vw, 0rem);
-  bottom: 0;
+  bottom: calc(var(--alto-onda) * 0.6);
   width: clamp(7.5rem, 20vw, 16rem);
 }
 
 .hero__flor {
   left: clamp(5rem, 17vw, 14rem);
-  bottom: -1rem;
+  bottom: 0;
   width: clamp(4.5rem, 10vw, 8rem);
+}
+
+.hero__flor-blanca {
+  right: clamp(6rem, 16vw, 13rem);
+  bottom: 0;
+  width: clamp(5.5rem, 12vw, 10rem);
 }
 
 .hero__tucan {
   right: clamp(-1rem, -1vw, 0rem);
-  bottom: 0;
+  bottom: calc(var(--alto-onda) * 0.6);
   width: clamp(7rem, 17vw, 14rem);
 }
 
@@ -356,8 +368,9 @@ a:focus-visible {
 }
 
 /* Secciones */
+/* El final de cada sección queda bajo la onda que sigue */
 .seccion {
-  padding: clamp(3rem, 8vw, 5.5rem) 1.25rem;
+  padding: clamp(3rem, 8vw, 5.5rem) 1.25rem calc(clamp(3rem, 8vw, 5.5rem) + var(--alto-onda));
 }
 
 .seccion--crema {
@@ -398,26 +411,28 @@ a:focus-visible {
 
 .deco--banano {
   right: -3rem;
-  bottom: -2rem;
+  bottom: 0;
   width: clamp(10rem, 24vw, 19rem);
-}
-
-.deco--rama {
-  top: -3rem;
-  right: -4rem;
-  width: clamp(12rem, 30vw, 24rem);
-  rotate: 20deg;
 }
 
 .deco--palmera {
   left: -4rem;
-  bottom: -2rem;
+  bottom: 0;
   width: clamp(10rem, 24vw, 20rem);
 }
 
 @media (min-width: 90rem) {
   .deco {
     opacity: 0.95;
+  }
+
+  /* Ya con color pleno, que no pisen el texto: solo ocupan el margen lateral */
+  .deco--banano {
+    width: min(19rem, calc((100vw - var(--ancho)) / 2 + 3rem));
+  }
+
+  .deco--palmera {
+    width: min(20rem, calc((100vw - var(--ancho)) / 2 + 2rem));
   }
 }
 
@@ -436,7 +451,7 @@ a:focus-visible {
 }
 
 .historia__foto {
-  border-radius: 999px 999px var(--radio) var(--radio);
+  border-radius: calc(var(--radio) * 1.5);
   border: 6px solid rgb(117 184 67 / 0.7);
   box-shadow: 0 30px 60px rgb(0 0 0 / 0.35);
   aspect-ratio: 4 / 5;
@@ -455,7 +470,7 @@ a:focus-visible {
   display: grid;
   gap: 2.5rem;
   align-items: center;
-  margin-bottom: clamp(3rem, 7vw, 5rem);
+  margin-bottom: clamp(6rem, 12vw, 8rem);
 }
 
 .acai__fotos {
@@ -470,7 +485,7 @@ a:focus-visible {
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  border-radius: 999px 999px var(--radio) var(--radio);
+  border-radius: var(--radio);
   box-shadow: var(--sombra);
 }
 
@@ -491,6 +506,13 @@ a:focus-visible {
 .menu h3,
 .menu h4 {
   color: var(--blanco);
+}
+
+/* El vaso del banner asoma sobre la carta, como en el menú impreso */
+.menu__vaso {
+  width: clamp(5.5rem, 14vw, 7.5rem);
+  margin: calc(-1 * clamp(5rem, 12vw, 7rem)) auto 1rem;
+  filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.35));
 }
 
 .menu__titulo {
@@ -662,8 +684,10 @@ address {
 
 /* Separadores en onda entre secciones */
 .onda {
-  --alto: clamp(2.5rem, 7vw, 6rem);
-  height: var(--alto);
+  position: relative;
+  z-index: 1;
+  height: var(--alto-onda);
+  margin-top: calc(-1 * var(--alto-onda));
   margin-bottom: -1px;
 }
 
@@ -671,12 +695,6 @@ address {
   display: block;
   width: 100%;
   height: 100%;
-}
-
-.onda--sobre {
-  position: relative;
-  z-index: 1;
-  margin-top: calc(-1 * var(--alto));
 }
 
 @media (min-width: 48rem) {
@@ -787,7 +805,8 @@ address {
   }
 
   .hero__loro,
-  .hero__flor {
+  .hero__flor,
+  .hero__flor-blanca {
     animation: desde-izq 1.3s var(--suave) 0.3s both;
   }
 
