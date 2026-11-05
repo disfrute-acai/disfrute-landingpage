@@ -288,9 +288,10 @@ a:focus-visible {
   transform: scaleX(-1);
 }
 
+/* Los pájaros se posan en ramas que salen de la tierra (bajo la onda), no flotan */
 .hero__loro {
   left: clamp(-2rem, -2vw, 0rem);
-  bottom: calc(var(--alto-onda) * 0.6);
+  bottom: calc(-0.35 * var(--alto-onda));
   width: clamp(7.5rem, 20vw, 16rem);
 }
 
@@ -308,7 +309,7 @@ a:focus-visible {
 
 .hero__tucan {
   right: clamp(-1rem, -1vw, 0rem);
-  bottom: calc(var(--alto-onda) * 0.6);
+  bottom: calc(-0.35 * var(--alto-onda));
   width: clamp(7rem, 17vw, 14rem);
 }
 
