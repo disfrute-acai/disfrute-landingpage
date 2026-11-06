@@ -18,18 +18,7 @@ const absoluta = (path: string) => new URL(path, Astro.site).href;
 const indexar = import.meta.env.PUBLIC_INDEXAR === "true";
 const imagenAbsoluta = new URL(ruta(imagen), Astro.site).href;
 
-// GitHub Pages no permite headers propios: la CSP va por <meta>. Solo en build,
-// porque el servidor de desarrollo inyecta scripts propios.
-const csp = [
-  "default-src 'self'",
-  "img-src 'self' data:",
-  "style-src 'self' 'unsafe-inline'",
-  "script-src 'none'",
-  "frame-src https://www.google.com",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'none'",
-].join("; ");
+// La CSP y el resto de los headers de seguridad están en public/_headers (Cloudflare Pages).
 ---
 
 <!doctype html>
@@ -37,9 +26,7 @@ const csp = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {import.meta.env.PROD && <meta http-equiv="Content-Security-Policy" content={csp} />}
     {!indexar && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>{titulo}</title>
     <meta name="description" content={descripcion} />
     <meta name="theme-color" content="#392054" />

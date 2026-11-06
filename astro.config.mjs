@@ -1,9 +1,9 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
-// En GitHub Actions, `actions/configure-pages` entrega la URL y el path reales del sitio
-// (sirve para cualquier cuenta o dominio propio). En local se usan los valores por defecto.
+// Publicado en Cloudflare Pages con dominio propio. SITE_URL se puede pisar desde las
+// variables del proyecto en Cloudflare (por ej. para probar en el subdominio *.pages.dev).
 export default defineConfig({
-  site: process.env.SITE_URL || "http://localhost:4321",
-  base: process.env.BASE_PATH ?? "/disfrute",
+  site: process.env.SITE_URL || "https://disfrute-acai.com",
+  base: process.env.BASE_PATH ?? "/",
 });

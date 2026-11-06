@@ -1,0 +1,20 @@
+# Headers de seguridad y caché para Cloudflare Pages.
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'none'; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000
+
+# Archivos con hash en el nombre: no cambian nunca, se cachean un año.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Las URLs *.pages.dev (vistas previas y el subdominio por defecto) no se indexan:
+# así Google solo ve disfrute-acai.com.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
