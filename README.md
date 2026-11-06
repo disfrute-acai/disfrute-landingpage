@@ -3,7 +3,8 @@
 Landing informativa de ¡Disfrute! Açaí en español (`/`), portugués (`/pt/`) e inglés (`/en/`): inicio, historia, menú, dónde encontrarnos y contacto.
 
 - **Stack:** [Astro](https://astro.build) (sitio estático, sin JavaScript en el navegador) + CSS.
-- **Hosting:** GitHub Pages, publicado por GitHub Actions al hacer push a `main`.
+- **Hosting:** [Cloudflare Pages](https://pages.cloudflare.com) en `disfrute-acai.com`. Cada push a `main` se publica solo; cada PR genera una vista previa en `*.pages.dev`.
+- **CI:** GitHub Actions compila el sitio en cada PR (`.github/workflows/ci.yml`). Si el contenido no es válido, falla.
 - **Contenido:** archivos de texto en `src/content/`, validados en el build (`src/content.config.ts`). Ver [COMO-EDITAR.md](COMO-EDITAR.md).
 
 ## Desarrollo
@@ -12,7 +13,7 @@ Requiere Node (ver `.nvmrc`).
 
 ```sh
 npm install
-npm run dev      # http://localhost:4321/disfrute/
+npm run dev      # http://localhost:4321/
 npm run build    # valida contenido + genera dist/
 npm run preview
 ```
@@ -37,15 +38,43 @@ public/img/                 # Fotos, logos e ilustraciones (deco/)
 
 ## Puesta en marcha
 
-1. Crear el repo en la cuenta de GitHub de ¡Disfrute! (con 2FA activado) y sumar al desarrollador como colaborador.
-2. La URL y el path se toman solos de GitHub Pages en el deploy (cuenta o dominio propio): no hay que tocar `astro.config.mjs`.
-3. *Settings → Pages → Source:* **GitHub Actions**.
-4. *Settings → Branches:* proteger `main` contra force-push y borrado.
-5. Dominio propio (opcional): verificarlo en *Settings de la cuenta → Pages → Verified domains*, configurarlo en el repo y activar **Enforce HTTPS**.
+### 1. Repo en la cuenta de ¡Disfrute!
+
+El repo vive en la cuenta de GitHub de uno de los dueños (con **2FA activado**) y el desarrollador es colaborador.
+
+- *Settings → Branches:* proteger `main` contra force-push y borrado, y exigir que pase el check **CI / build**.
+
+### 2. Cloudflare Pages
+
+Con la cuenta de Cloudflare del negocio (mail del negocio, 2FA activado):
+
+1. *Workers & Pages → Create → Pages → Connect to Git* → autorizar **solo este repo** (no "All repositories").
+2. Configuración del build:
+
+   | Campo | Valor |
+   |---|---|
+   | Project name | `disfrute-acai` |
+   | Production branch | `main` |
+   | Framework preset | Astro |
+   | Build command | `npm run build` |
+   | Build output directory | `dist` |
+
+   La versión de Node se toma de `.nvmrc`.
+3. *Settings → Variables and Secrets* (entorno **Production**): `PUBLIC_INDEXAR` = `false` mientras sea vista previa (ver abajo).
+
+### 3. Dominio `disfrute-acai.com`
+
+1. En Cloudflare: *Add a domain* → `disfrute-acai.com` → plan Free. Cloudflare muestra dos *nameservers*.
+2. En el registrador donde se compró el dominio: reemplazar los nameservers por los de Cloudflare. Tarda de minutos a 24 h.
+3. En el proyecto de Pages: *Custom domains* → agregar `disfrute-acai.com` y `www.disfrute-acai.com`. Cloudflare crea los registros DNS y el certificado HTTPS.
+4. Redirigir `www` al dominio principal: *Rules → Redirect Rules → Redirect from WWW to root* (plantilla), código 301.
+5. *SSL/TLS → Edge Certificates:* activar **Always Use HTTPS**.
+
+Los headers de seguridad (CSP, HSTS, etc.) y el `noindex` de las URLs `*.pages.dev` están en `public/_headers`.
 
 ## Vista previa vs. sitio definitivo
 
-Por defecto el sitio se publica con `noindex` (no aparece en Google), porque las fotos y textos son provisorios. Cuando esté listo: *Settings → Secrets and variables → Actions → Variables* → crear `INDEXAR` = `true` y volver a correr el workflow.
+Por defecto el sitio se publica con `noindex` (no aparece en Google), porque las fotos y textos son provisorios. Cuando esté listo: en Cloudflare, *Settings → Variables and Secrets* → `PUBLIC_INDEXAR` = `true` y *Deployments → Retry deployment* en el último deploy.
 
 ## Marca
 

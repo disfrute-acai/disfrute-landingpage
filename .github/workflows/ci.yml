@@ -1,0 +1,34 @@
+name: CI
+
+# El deploy lo hace Cloudflare Pages (conectado al repo). Este workflow solo valida
+# que el sitio compile (contenido, traducciones, tipos) en cada PR y push a main.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # Versión fija del runner: un cambio de imagen no rompe el build sin aviso.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      # Acciones fijadas por SHA (inmutable); Dependabot las mantiene al día.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
