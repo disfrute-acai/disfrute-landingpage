@@ -1,0 +1,18 @@
+// Cloudflare Workers (solo archivos estáticos, sin código de servidor).
+// https://developers.cloudflare.com/workers/static-assets/
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "disfrute-landingpage",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  // Solo se publica en disfrute-acai.com: sin URL *.workers.dev ni vistas previas públicas.
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "disfrute-acai.com", "custom_domain": true },
+    { "pattern": "www.disfrute-acai.com", "custom_domain": true }
+  ]
+}

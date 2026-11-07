@@ -18,7 +18,7 @@ const absoluta = (path: string) => new URL(path, Astro.site).href;
 const indexar = import.meta.env.PUBLIC_INDEXAR === "true";
 const imagenAbsoluta = new URL(ruta(imagen), Astro.site).href;
 
-// La CSP y el resto de los headers de seguridad están en public/_headers (Cloudflare Pages).
+// La CSP y el resto de los headers de seguridad están en public/_headers (Cloudflare).
 ---
 
 <!doctype html>

@@ -7,3 +7,4 @@ dist/
 
 # Archivos de diseño (banners, brand book): pesados, no van al repo
 *.pdf
+.wrangler/
