@@ -3,7 +3,7 @@
 Landing informativa de ¡Disfrute! Açaí en español (`/`), portugués (`/pt/`) e inglés (`/en/`): inicio, historia, menú, dónde encontrarnos y contacto.
 
 - **Stack:** [Astro](https://astro.build) (sitio estático, sin JavaScript en el navegador) + CSS.
-- **Hosting:** [Cloudflare Pages](https://pages.cloudflare.com) en `disfrute-acai.com`. Cada push a `main` se publica solo; cada PR genera una vista previa en `*.pages.dev`.
+- **Hosting:** [Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/) (solo archivos estáticos) en `disfrute-acai.com`, configurado en `wrangler.jsonc`. Cada push a `main` se publica solo.
 - **CI:** GitHub Actions compila el sitio en cada PR (`.github/workflows/ci.yml`). Si el contenido no es válido, falla.
 - **Contenido:** archivos de texto en `src/content/`, validados en el build (`src/content.config.ts`). Ver [COMO-EDITAR.md](COMO-EDITAR.md).
 
@@ -40,41 +40,36 @@ public/img/                 # Fotos, logos e ilustraciones (deco/)
 
 ### 1. Repo en la cuenta de ¡Disfrute!
 
-El repo vive en la cuenta de GitHub de uno de los dueños (con **2FA activado**) y el desarrollador es colaborador.
+El repo vive en la organización de GitHub de ¡Disfrute! (con **2FA obligatorio**).
 
-- *Settings → Branches:* proteger `main` contra force-push y borrado, y exigir que pase el check **CI / build**.
-
-### 2. Cloudflare Pages
+### 2. Cloudflare Workers
 
 Con la cuenta de Cloudflare del negocio (mail del negocio, 2FA activado):
 
-1. *Workers & Pages → Create → Pages → Connect to Git* → autorizar **solo este repo** (no "All repositories").
-2. Configuración del build:
+1. Agregar el dominio: *Add a domain* → `disfrute-acai.com` → **Connect** → plan Free. En GoDaddy (*Servidores de nombres → Introduciré mis propios servidores de nombres*) poner los dos nameservers que da Cloudflare y esperar a que el dominio quede **Active**.
+2. *Workers & Pages → Create application → Import a repository* → GitHub → organización `disfrute-acai`, **solo este repo**.
+3. Configuración:
 
    | Campo | Valor |
    |---|---|
-   | Project name | `disfrute-acai` |
-   | Production branch | `main` |
-   | Framework preset | Astro |
+   | Project name | `disfrute-acai` (tiene que coincidir con `name` de `wrangler.jsonc`) |
    | Build command | `npm run build` |
-   | Build output directory | `dist` |
+   | Deploy command | `npx wrangler deploy` |
+   | Root directory | `/` |
 
    La versión de Node se toma de `.nvmrc`.
-3. *Settings → Variables and Secrets* (entorno **Production**): `PUBLIC_INDEXAR` = `false` mientras sea vista previa (ver abajo).
+4. *Settings → Build → Variables and secrets:* `PUBLIC_INDEXAR` = `false` mientras sea vista previa (ver abajo).
 
-### 3. Dominio `disfrute-acai.com`
+Los dominios `disfrute-acai.com` y `www.disfrute-acai.com` se conectan solos en cada deploy (`routes` de `wrangler.jsonc`), con DNS y certificado HTTPS. Falta, una sola vez, en el panel del dominio:
 
-1. En Cloudflare: *Add a domain* → `disfrute-acai.com` → plan Free. Cloudflare muestra dos *nameservers*.
-2. En el registrador donde se compró el dominio: reemplazar los nameservers por los de Cloudflare. Tarda de minutos a 24 h.
-3. En el proyecto de Pages: *Custom domains* → agregar `disfrute-acai.com` y `www.disfrute-acai.com`. Cloudflare crea los registros DNS y el certificado HTTPS.
-4. Redirigir `www` al dominio principal: *Rules → Redirect Rules → Redirect from WWW to root* (plantilla), código 301.
-5. *SSL/TLS → Edge Certificates:* activar **Always Use HTTPS**.
+- *Rules → Redirect Rules →* plantilla **Redirect from WWW to root** (301).
+- *SSL/TLS → Edge Certificates →* **Always Use HTTPS**.
 
-Los headers de seguridad (CSP, HSTS, etc.) y el `noindex` de las URLs `*.pages.dev` están en `public/_headers`.
+Los headers de seguridad (CSP, HSTS, etc.) están en `public/_headers`.
 
 ## Vista previa vs. sitio definitivo
 
-Por defecto el sitio se publica con `noindex` (no aparece en Google), porque las fotos y textos son provisorios. Cuando esté listo: en Cloudflare, *Settings → Variables and Secrets* → `PUBLIC_INDEXAR` = `true` y *Deployments → Retry deployment* en el último deploy.
+Por defecto el sitio se publica con `noindex` (no aparece en Google), porque las fotos y textos son provisorios. Cuando esté listo: en el Worker de Cloudflare, *Settings → Build → Variables and secrets* → `PUBLIC_INDEXAR` = `true` y volver a desplegar (*Deployments* → último build → *Retry build*).
 
 ## Marca
 

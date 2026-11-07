@@ -1,6 +1,6 @@
 name: CI
 
-# El deploy lo hace Cloudflare Pages (conectado al repo). Este workflow solo valida
+# El deploy lo hace Cloudflare Workers Builds (conectado al repo). Este workflow solo valida
 # que el sitio compile (contenido, traducciones, tipos) en cada PR y push a main.
 on:
   push:
