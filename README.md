@@ -52,7 +52,11 @@ Con la cuenta de Cloudflare del negocio (mail del negocio, 2FA activado):
 
    | Campo | Valor |
    |---|---|
+<<<<<<< HEAD
    | Project name | `disfrute-landingpage` (tiene que coincidir con `name` de `wrangler.jsonc`) |
+=======
+   | Project name | `disfrute-acai` (tiene que coincidir con `name` de `wrangler.jsonc`) |
+>>>>>>> ed8b55623ff9cfdad12ecf12b7afc0c5e10fd7ab
    | Build command | `npm run build` |
    | Deploy command | `npx wrangler deploy` |
    | Root directory | `/` |
